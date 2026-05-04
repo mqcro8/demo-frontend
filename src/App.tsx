@@ -64,7 +64,7 @@ function App() {
       </nav>
 
       <section className="hero">
-        <h1>Verify emails in <span className="highlight">&lt;200ms</span></h1>
+        <h1>Verify emails in <span className="highlight">&lt;300ms</span></h1>
         <p className="subtitle">High-performance email verification API with real-time validation, DNS checks, and risk scoring.</p>
       </section>
 

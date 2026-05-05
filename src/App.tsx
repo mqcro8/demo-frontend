@@ -3,7 +3,7 @@ import './App.css';
 
 function App() {
   const [email, setEmail] = useState('');
-  const [result, setResult] = useState<{ email: string; valid: boolean; reason: string } | null>(null);
+  const [result, setResult] = useState<{ email: string; valid: boolean; category: string; risk_score: number } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [rateLimitInfo, setRateLimitInfo] = useState('');
@@ -25,11 +25,15 @@ function App() {
     setResult(null);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/verify`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
+
+      if(response.ok){
+        console.log("I'm k")
+      }
 
       const remaining = response.headers.get('X-RateLimit-Remaining');
       const limit = response.headers.get('X-RateLimit-Limit');
@@ -45,7 +49,7 @@ function App() {
       } else {
         setError(data.error || 'Verification failed');
       }
-    } catch {
+    } catch (error) {
       setError('Failed to connect to the server');
     } finally {
       setLoading(false);
@@ -57,7 +61,7 @@ function App() {
       <nav className="nav">
         <div className="logo">VerifyAPI</div>
         <div className="rapidapi-badge-placeholder">
-          <a href="https://rapidapi.com/YOUR_USERNAME/api/YOUR_API" target="_blank">
+          <a href="https://rapidapi.com/macqro888/api/email-verification-api18" target="_blank">
           <img src="https://storage.googleapis.com/rapidapi-documentation/connect-on-rapidapi-dark.png" width="215" alt="Connect on RapidAPI"/>
         </a>
         </div>
@@ -90,11 +94,11 @@ function App() {
           {error && <div className="error">{error}</div>}
 
           {result && (
-            <div className={`result ${result.valid ? 'valid' : 'invalid'}`}>
+            <div className={`result result-${result.category.toLowerCase().replace(/ /g, '-')}`}>
               <div className="result-icon">{result.valid ? '✓' : '✗'}</div>
               <div className="result-text">
                 <strong>{result.email}</strong>
-                <span>{result.reason}</span>
+                <span className="category">{result.category}</span>
               </div>
             </div>
           )}

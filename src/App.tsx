@@ -3,10 +3,24 @@ import './App.css';
 
 function App() {
   const [email, setEmail] = useState('');
-  const [result, setResult] = useState<{ email: string; valid: boolean; category: string; risk_score: number } | null>(null);
+  const [result, setResult] = useState<{ email: string; valid: boolean; category: string; risk_score: number; confidence: number } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [rateLimitInfo, setRateLimitInfo] = useState('');
+
+  const getCategory = (risk: number, confidence: number): string => {
+    if (confidence >= 0.7) {
+      if (risk <= 0.2) return 'Very Safe';
+      if (risk <= 0.4) return 'Likely Valid';
+      if (risk <= 0.6) return 'Proceed with Caution';
+      if (risk <= 0.8) return 'Risky';
+      return 'Very Risky';
+    } else {
+      if (risk <= 0.3) return 'Likely Valid*';
+      if (risk <= 0.6) return 'Uncertain - Proceed with Caution';
+      return 'Likely Risky*';
+    }
+  };
 
   const handleVerify = async () => {
     if (!email) {
@@ -45,7 +59,8 @@ function App() {
       const data = await response.json();
 
       if (data.success) {
-        setResult(data);
+        const category = getCategory(data.risk_score, data.confidence);
+        setResult({ ...data, category });
       } else {
         setError(data.error || 'Verification failed');
       }
@@ -99,6 +114,8 @@ function App() {
               <div className="result-text">
                 <strong>{result.email}</strong>
                 <span className="category">{result.category}</span>
+                <span className="risk">Risk: {result.risk_score.toFixed(2)}</span>
+                <span className="confidence">Confidence: {result.confidence.toFixed(2)}</span>
               </div>
             </div>
           )}

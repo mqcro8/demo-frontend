@@ -7,6 +7,11 @@ A lightweight interface for the **Email Verification API** — a high-performanc
 
 > https://demo-frontend-5a1sypjor-mqcro8s-projects.vercel.app
 
+## Tech Stack
+- **React 18** with TypeScript
+- **Vite** for fast development and build
+- **CSS Modules** for scoped styling
+
 ## Features
 - Real-time email verification via API
 - Displays validation results (valid/invalid) with reasons
@@ -15,9 +20,9 @@ A lightweight interface for the **Email Verification API** — a high-performanc
 - Dark, responsive UI
 
 ## Links
-- **Contact**: [miguel.ceballos.a@hotmail.com](mailto:myemail@example.com)
-- **RapidAPI Profile**: [https://rapidapi.com/user/macqro888](https://rapidapi.com/...)
-- **GitHub Profile**: [https://github.com/mqcro8](https://github.com/...)
+- **Contact**: [miguel.ceballos.a@hotmail.com](mailto:miguel.ceballos.a@hotmail.com)
+- **RapidAPI Profile**: [macqro888](https://rapidapi.com/user/macqro888)
+- **GitHub Profile**: [mqcro8](https://github.com/mqcro8)
 
 ---
 

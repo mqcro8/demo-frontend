@@ -45,25 +45,32 @@ function App() {
         body: JSON.stringify({ email }),
       });
 
-      if(response.ok){
-        console.log("I'm k")
-      }
+       if (!response.ok) {
+         setError(`Server error: ${response.status}`);
+         return;
+       }
 
-      const remaining = response.headers.get('X-RateLimit-Remaining');
-      const limit = response.headers.get('X-RateLimit-Limit');
+       const contentType = response.headers.get('content-type');
+       if (!contentType || !contentType.includes('application/json')) {
+         setError('Invalid response from server');
+         return;
+       }
 
-      if (remaining !== null && limit !== null) {
-        setRateLimitInfo(`${remaining} requests remaining (${limit} per minute)`);
-      }
+       const remaining = response.headers.get('X-RateLimit-Remaining');
+       const limit = response.headers.get('X-RateLimit-Limit');
 
-      const data = await response.json();
+       if (remaining !== null && limit !== null) {
+         setRateLimitInfo(`${remaining} requests remaining (${limit} per minute)`);
+       }
 
-      if (data.success) {
-        const category = getCategory(data.risk_score, data.confidence);
-        setResult({ ...data, category });
-      } else {
-        setError(data.error || 'Verification failed');
-      }
+       const data = await response.json();
+
+       if (data.success) {
+         const category = getCategory(data.risk_score, data.confidence);
+         setResult({ ...data, category });
+       } else {
+         setError(data.error || 'Verification failed');
+       }
     } catch (error) {
       setError('Failed to connect to the server');
     } finally {
